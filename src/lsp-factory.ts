@@ -15,11 +15,12 @@ const lspFactory = new LSPFactory(provider, {
   chainId,
 });
 
+// @ts-ignore
 const main = async () => {
   // https://docs.lukso.tech/tools/lsp-factoryjs/classes/lsp3-universal-profile#deploy
   const receipt = await lspFactory.LSP3UniversalProfile.deploy(
     {
-      controllerAddresses: [myEOA],
+      controllerAddresses: [myEOA.address],
       lsp3Profile: {
         name: 'Test',
         description: 'Cool',
@@ -39,4 +40,21 @@ const main = async () => {
   console.log(receipt);
 };
 
-main();
+const lsp4 = async () => {
+  const receipt = await lspFactory.LSP7DigitalAsset.deploy({
+    name: 'My token',
+    symbol: 'TKN',
+    controllerAddress: myEOA.address,
+    creators: [myEOA.address],
+    isNFT: true,
+  });
+
+  console.log(receipt);
+
+  console.log(
+    // @ts-ignore
+    `You can debug this deployment at: https://erc725-inspect.lukso.tech/inspect?address=${receipt.LSP7DigitalAsset.address}`,
+  );
+};
+
+lsp4();
